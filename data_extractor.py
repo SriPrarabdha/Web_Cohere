@@ -23,7 +23,7 @@ loader = apify.call_actor(
     actor_id="apify/website-content-crawler",
     run_input={"startUrls": [{"url": "https://python.langchain.com/en/latest/"}]},
     dataset_mapping_function=lambda item: Document(
-        page_content=item["text"] or "", metadata={"source": item["url"]}
+        page_content=item["text"] or "", metadata={"source": item["url"] , "page_title" : item["pageTitle"] , "h1" : item["h1"] , "h2": item["h2"]}
     ),
 )
 print(loader)
