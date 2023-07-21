@@ -23,10 +23,20 @@ loader = apify.call_actor(
     actor_id="apify/website-content-crawler",
     run_input={"startUrls": [{"url": "https://python.langchain.com/en/latest/"}]},
     dataset_mapping_function=lambda item: Document(
-        page_content=item["text"] or "", metadata={"source": item["url"] , "page_title" : item["pageTitle"] , "h1" : item["h1"] , "h2": item["h2"]}
+        page_content=item["text"] + item["markdown"]or "", metadata={"source": item["url"] , "title" : item["metadata"]["title"] , "description" : item["metadata"]["description"]}
     ),
 )
 print(loader)
+
+data = loader.load()
+data[0]
+import cohere
+co = cohere.Client('xCRrVzZjuPM5HN6WFKM1eykBBwHMezrMhaQ0AaD7')
+
+response = co.summarize(
+  text=data[0],
+)
+print(response)
 
 # Fetch data from an existing Apify dataset.
 # loader = ApifyDatasetLoader(
